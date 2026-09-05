@@ -1,0 +1,93 @@
+/* Corrección de zonas táctiles de las tarjetas de combate de MPL5.
+   app.js limpia los botones usando estilos inline. Estas reglas usan
+   !important únicamente mientras la tarjeta tenga el modo correspondiente. */
+
+#encounterCard.combat #gunButton,
+#encounterCard.combat #fistButton{
+  display:block !important;
+  pointer-events:auto !important;
+  touch-action:manipulation;
+  z-index:160;
+}
+
+#encounterCard.combat #enemyHp{
+  display:flex !important;
+  pointer-events:none;
+  z-index:165;
+}
+
+#encounterCard.special-top #specialTopButton{
+  display:block !important;
+  pointer-events:auto !important;
+  touch-action:manipulation;
+  z-index:170;
+}
+
+#encounterCard.special-lower #specialLowerButton{
+  display:block !important;
+  pointer-events:auto !important;
+  touch-action:manipulation;
+  z-index:170;
+}
+
+#encounterCard.robot #grenadeButton{
+  display:block !important;
+  pointer-events:auto !important;
+  touch-action:manipulation;
+  z-index:175;
+}
+
+/* Zonas ajustadas a las tarjetas de MPL5. */
+#gunButton{
+  left:8% !important;
+  top:54% !important;
+  width:38% !important;
+  height:22% !important;
+}
+
+#fistButton{
+  left:65% !important;
+  top:54% !important;
+  width:31% !important;
+  height:22% !important;
+}
+
+/* Icono superior izquierdo: activa el desenlace de A3E y A11E. */
+#specialTopButton{
+  left:6% !important;
+  top:6% !important;
+  width:29% !important;
+  height:18% !important;
+}
+
+/* En las tarjetas de robot esa misma zona corresponde a la granada. */
+#grenadeButton{
+  left:6% !important;
+  top:6% !important;
+  width:29% !important;
+  height:18% !important;
+}
+
+/* Vida colocada sobre el corazón de la esquina superior derecha. */
+#enemyHp{
+  left:85.5% !important;
+  top:13.8% !important;
+  width:15% !important;
+  height:11% !important;
+  transform:translate(-50%,-50%) !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center;
+  font-size:clamp(23px,6vw,38px) !important;
+  line-height:1;
+}
+
+/* Mantener ocultos los controles al salir del modo correspondiente. */
+#encounterCard:not(.combat) #gunButton,
+#encounterCard:not(.combat) #fistButton,
+#encounterCard:not(.combat) #enemyHp,
+#encounterCard:not(.special-top) #specialTopButton,
+#encounterCard:not(.special-lower) #specialLowerButton,
+#encounterCard:not(.robot) #grenadeButton{
+  display:none !important;
+}
