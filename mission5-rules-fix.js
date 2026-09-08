@@ -2,12 +2,12 @@
    1) A3 y A11: el desenlace y la recompensa SOLO se activan con el icono
       especial de la esquina superior izquierda. Si se derrota al marciano
       con puño o pistola, la sala se completa sin A3F/A11F y sin recompensa.
-   2) Robot: 24 de vida global y retirada del encuentro tras recibir 4 de daño.
+   2) Robot: 20 de vida global y retirada del encuentro tras recibir 4 de daño.
 */
 
-/* La vida global se inicializa en 24 antes del primer encuentro. */
-if(!state.robotAwakened && !state.robotDefeated && state.robotHp===20){
-  state.robotHp=24;
+/* La vida global se inicializa en 20 antes del primer encuentro. */
+if(!state.robotAwakened && !state.robotDefeated){
+  state.robotHp=20;
 }
 
 /* Sustituimos únicamente la resolución del combate contra enemigos normales. */
