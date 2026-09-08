@@ -64,3 +64,114 @@ handleRoomClick = function(room){
 
   handleRoomClickSkualoGateBase(room);
 };
+
+/* =========================================================
+   AJUSTES VISUALES DEL FINAL
+   ========================================================= */
+
+/* Nuevo texto de la escena FF. */
+const finalStoryTextSkualo = document.getElementById("finalStoryText");
+if(finalStoryTextSkualo){
+  finalStoryTextSkualo.textContent = "Skualo y Yumi apenas escaparon. El ala derecha estalló en pedazos y, de sus restos, emergió una criatura mecánica que empezó a devorar la nave lentamente.";
+}
+
+/* Fundido de FF al entrar y salir. Se impone sobre el display:none original. */
+const finalFadeStyle = document.createElement("style");
+finalFadeStyle.textContent = `
+#finalStoryOverlay{
+  display:flex !important;
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .45s ease, visibility .45s ease;
+}
+#finalStoryOverlay.show{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
+#finalStoryText{
+  opacity:0;
+  transform:translateX(-50%) translateY(10px);
+  transition:opacity .45s ease, transform .45s ease;
+}
+#finalStoryOverlay.show #finalStoryText{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+#encounterImage{
+  transition:opacity .32s ease;
+}
+`;
+document.head.appendChild(finalFadeStyle);
+
+/* Fundido entre A1F -> A1F1 -> A1F2. Como este archivo se carga antes de
+   a1-ending-sequence.js, las llamadas de esa secuencia pasan por aquí. */
+const setEncounterImageFadeBase = setEncounterImage;
+setEncounterImage = function(src,fallbackLabel){
+  const isA1EndingImage = src === "A1F.png" || src === "A1F1.png" || src === "A1F2.png";
+
+  if(!isA1EndingImage){
+    setEncounterImageFadeBase(src,fallbackLabel);
+    return;
+  }
+
+  encounterCard.style.pointerEvents = "none";
+  encounterImage.style.opacity = "0";
+
+  setTimeout(()=>{
+    setEncounterImageFadeBase(src,fallbackLabel);
+    requestAnimationFrame(()=>{
+      encounterImage.style.opacity = "1";
+    });
+
+    setTimeout(()=>{
+      encounterCard.style.pointerEvents = "";
+    },340);
+  },180);
+};
+
+/* Al tocar FF esperamos a que termine el fundido antes de mostrar
+   MISIÓN CUMPLIDA. Interceptamos los listeners originales en captura. */
+function finishFinalStoryWithFade(event){
+  if(!finalStoryOverlay || !finalStoryOverlay.classList.contains("show")) return;
+  if(finalStoryOverlay.dataset.closing === "1"){
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    return;
+  }
+
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  finalStoryOverlay.dataset.closing = "1";
+  finalStoryOverlay.classList.remove("show");
+
+  setTimeout(()=>{
+    finalStoryOverlay.dataset.closing = "0";
+    if(typeof finishMissionAfterFinalScene === "function"){
+      finishMissionAfterFinalScene();
+    }
+  },450);
+}
+
+if(finalStoryOverlay){
+  finalStoryOverlay.addEventListener("click",finishFinalStoryWithFade,true);
+  finalStoryOverlay.addEventListener("touchend",finishFinalStoryWithFade,true);
+}
+
+/* =========================================================
+   ROBOT DERROTADO: NO DEJAR ICONO EN LA ÚLTIMA UBICACIÓN
+   ========================================================= */
+const refreshRoomMarkersNoDefeatedRobotBase = refreshRoomMarkers;
+refreshRoomMarkers = function(){
+  refreshRoomMarkersNoDefeatedRobotBase();
+
+  if(state.robotDefeated){
+    const defeatedMarker = document.getElementById("robot-defeated-marker");
+    if(defeatedMarker) defeatedMarker.remove();
+
+    /* Respaldo por si el marcador cambia de id pero conserva la clase usada
+       por el robot itinerante/derrotado. */
+    iconsLayer.querySelectorAll(".robot-roam-image").forEach(marker=>marker.remove());
+  }
+};
