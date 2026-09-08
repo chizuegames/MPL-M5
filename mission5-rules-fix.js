@@ -100,3 +100,17 @@ attackRobot=function(kind,forcedDamage=null){
     combatLocked=false;
   },310);
 };
+
+/* A13: al completar el evento de Skualo, mantenemos el mensaje de VIDA AL MÁXIMO
+   y después mostramos claramente la nueva ventaja permanente. */
+const completeCurrentRoomSkualoBase=completeCurrentRoom;
+completeCurrentRoom=function(reward=null,options={}){
+  const room=state.pendingRoom;
+  completeCurrentRoomSkualoBase(reward,options);
+
+  if(room==="A13"){
+    setTimeout(()=>{
+      showMessage("AHORA SKUALO ESTÁ CONTIGO<br>AHORA TUS ATAQUES FÍSICOS HARÁN 3 DE DAÑO");
+    },1950);
+  }
+};
