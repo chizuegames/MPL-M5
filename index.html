@@ -6,6 +6,7 @@
   <title>MPL - Misión 5</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="combat-fix.css">
+  <link rel="stylesheet" href="final-scene-fix.css">
 </head>
 <body>
   <div id="introOverlay">
@@ -67,6 +68,11 @@
 
   <div id="message"></div>
 
+  <div id="finalStoryOverlay" role="button" tabindex="0" aria-label="Continuar al final de la misión">
+    <img id="finalStoryImage" src="FF.png" alt="Criatura mecánica emergiendo de la nave">
+    <div id="finalStoryText">El ala derecha estalló en pedazos y, de sus restos, emergió una criatura mecánica que empezó a devorar la nave lentamente.</div>
+  </div>
+
   <div id="endOverlay">
     <div id="endPanel">
       <h1 id="endTitle"></h1>
@@ -78,5 +84,6 @@
   <script src="mission5-rules-fix.js"></script>
   <script src="robot-movement-fix.js"></script>
   <script src="nurse-fix.js"></script>
+  <script src="final-scene-fix.js"></script>
 </body>
 </html>
