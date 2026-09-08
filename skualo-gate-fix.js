@@ -134,12 +134,16 @@ setEncounterImage = function(src,fallbackLabel){
 /* Al tocar FF esperamos a que termine el fundido antes de mostrar
    MISIÓN CUMPLIDA. Interceptamos los listeners originales en captura. */
 function finishFinalStoryWithFade(event){
-  if(!finalStoryOverlay || !finalStoryOverlay.classList.contains("show")) return;
+  if(!finalStoryOverlay) return;
+
+  /* Bloquea el click sintético que algunos móviles generan después de touchend. */
   if(finalStoryOverlay.dataset.closing === "1"){
     event.preventDefault();
     event.stopImmediatePropagation();
     return;
   }
+
+  if(!finalStoryOverlay.classList.contains("show")) return;
 
   event.preventDefault();
   event.stopImmediatePropagation();
